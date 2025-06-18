@@ -1,21 +1,14 @@
-const express=require('express')
-const app=express();
+const express = require('express')
+const app = express();
+const connectDb = require('./config/database')
+
+connectDb()
+  .then(() => {
+    console.log("connection to db is successful")
+    app.listen(7777, () => {
+      console.log('server is listening on the port 7777...')
+    })
+  })
+  .catch(() => console.error("something went wrong"))
 
 
-app.use('/test',(req,res) => {
-  res.send("this is test")
-})
-
-app.use('/user',(req,res) => {
-  res.send("this is user")
-})
-
-
-app.use('/',(req,res) => {
-  res.send("this is dashboard")
-})
-
-
-app.listen(7777,() => {
-  console.log('server is listening on the port 7777...')
-})
