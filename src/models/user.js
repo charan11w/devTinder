@@ -1,24 +1,24 @@
-const mongoose=require('mongiise')
+const mongoose=require('mongoose')
 const{Schema,model}=mongoose
 
 const userSchema=new Schema({
   firstName:{
-    typeof:String
+    type:String
   },
-  lastdName:{
-    typeof:String
+  lastName:{
+    type:String
   },
   emailId:{
-    typeof:String
+    type:String
   },
   password:{
-    typeof:String
+    type:String
   },
   age:{
-    typeof:String
+    type:String
   },
   gender:{
-    typeof:String
+    type:String
   }
 })
 
