@@ -6,23 +6,21 @@ const User=require('./models/user')
 
 app.use(express.json())
 
+
+//create user with signup
 app.post('/signup',async(req,res)=>{
   try{
     const userData=req.body;
-    console.log(userData)
-
-
-    // const savedUsed=await User.create(userData)
-    const newUser=await User(userData)
-    const savedUser=await newUser.save()
-
+    const savedUser=await User.create(userData)
+    // const newUser=await User(userData)
+    // const savedUser=await newUser.save()
 
     res.status(201).json({
       message:'User Created Successfully',
       user:savedUser
     })
   }catch(err){
-    res.status(400).send("bad request");
+    res.status(400).send("bad request" + err.message);
   }
 })
 
@@ -40,7 +38,6 @@ app.get('/user',async(req,res)=>{
     res.status(400).send("something went wrong")
   }
 })
-
 
 //get - feed load all users with details
 app.get("/feed",async(req,res)=>{
@@ -75,10 +72,10 @@ app.patch('/user',async(req,res)=> {
     const data=req.body
     
     try{
-      const user=  await User.updateOne(emailId,data)
+      const user=  await User.updateOne(emailId,data,{runValidators:true})
       res.send("user updated successfully")
     }catch(err){
-      res.status(400).send("something went wrong")
+      res.status(400).send("something went wrong" + err.message)
     }
 })
 
@@ -90,6 +87,6 @@ connectDb()
       console.log('server is listening on the port 7777...')
     })
   })
-  .catch(() => console.error("something went wrong"))
+  .catch((err) => console.error("something went wrong" + err.message))
 
 
