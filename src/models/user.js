@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const validator=require('validator')
 const { Schema, model } = mongoose
 
 const userSchema = new mongoose.Schema({
@@ -15,11 +16,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    trim: true
+    lowercase:true,
+     set:(value) => value.replace(/\s+/g,''),
+    validate(value){
+      if(!validator.isEmail(value))  throw new Error('Invalid emial address : '+value)
+    },
+   
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    validate(value){
+      if(!validator.isStrongPassword(value)) throw new Error ('Enter a Strong Password : '+value)
+    }
   },
   age: {
     type: Number,
@@ -39,7 +48,10 @@ const userSchema = new mongoose.Schema({
   },
   photoURL: {
     type: String,
-    default: 'https://geographyandyou.com/images/user-profile.png'
+    default: 'https://geographyandyou.com/images/user-profile.png',
+     validate(value){
+      if(!validator.isURL(value))  throw new Error('Invalid image address : '+value)
+    }
   }
 }, {
   timestamps: true
