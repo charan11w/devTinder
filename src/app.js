@@ -4,9 +4,12 @@ const connectDb = require('./config/database')
 const User = require('./models/user')
 const {validateSignUpData}=require('./utils/validation')
 const bcrypt=require('bcrypt')
+const cookieParser=require('cookie-parser')
+const {userAuth}=require('../middlewares/auth')
 
 
 app.use(express.json())
+app.use(cookieParser())
 
 
 //create user with signup
@@ -42,15 +45,33 @@ app.post('/login',async(req,res)=>{
     if(!user){
       throw new Error("Invalid Credentials")
     }
-    const isValidPassword=await bcrypt.compare(password,user.password)
+    const isValidPassword=await user.validatePassword(password)
     if(isValidPassword){
+      //creating jwt token
+      const token=await user.getJWT();
+      //attaching jwt token to cookies and sending it back with response
+      res.cookie('token',token,{
+        httpOnly:true,
+        secure:true,
+        expires:new Date(Date.now() + 24*60*60*1000)
+      })
       res.send('login successfull!!')
     }else{
       throw new Error('Invalid Credentials')
     }
   }catch(err){
-    res.status(400).send('ERROR : '+err.message)
+    res.status(400).json({error: err.message})
   }
+})
+
+app.get('/profile',userAuth,async(req,res)=> {
+
+ try{
+  const{user}=req
+  res.send(user)
+ }catch(err){
+  res.status(400).send("ERROR : "+err.message)
+ }
 })
 
 //get user by emailId
@@ -119,6 +140,7 @@ app.patch('/user/:userId', async (req, res) => {
     res.status(400).send("UPDATE FAILED: " + err.message)
   }
 })
+
 
 
 
