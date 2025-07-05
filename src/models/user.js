@@ -54,7 +54,9 @@ const userSchema = new mongoose.Schema({
      validate(value){
       if(!validator.isURL(value))  throw new Error('Invalid image address : '+value)
     }
-  }
+  },
+ otp:String,
+ otpExpire:Date
 }, {
   timestamps: true
 });
