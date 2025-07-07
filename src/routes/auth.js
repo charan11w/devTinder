@@ -32,9 +32,10 @@ authRouter.post('/signup', async (req, res) => {
 
 authRouter.post('/login', async (req, res) => {
   try {
+    
     const { emailId, password } = req.body
 
-    const user = await User.findOne({emailId : emailId})
+    const user = await User.findOne({emailId})
     if (!user) {
       throw new Error("Invalid Credentials ok")
     }
@@ -44,7 +45,7 @@ authRouter.post('/login', async (req, res) => {
       const token = await user.getJWT();
       //attaching jwt token to cookies and sending it back with response
       res.cookie('token', token)
-      res.send('login successfull!!')
+      res.json({ message: "login successfull!!",data:user});
     } else {
       throw new Error('Invalid Credentials')
     }
