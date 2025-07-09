@@ -1,7 +1,7 @@
 const express = require('express')
 const userRouter = express.Router();
 
-const USER_POPULATE_FIELDS = "firstName lastName age gender skills about"
+const USER_POPULATE_FIELDS = "firstName lastName age gender skills about photoURL"
 
 const ConnectionRequest = require('../models/connectionRequest');
 const User = require("../models/user")
