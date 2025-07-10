@@ -15,11 +15,12 @@ userRouter.get('/user/requests', userAuth, async (req, res) => {
     const connectionRequests = await ConnectionRequest.find({
       toUserId: loggedUser._id,
       status: "interested"
-    }).populate({ path: "fromUserId", select: "firstName lastName gender age about skills" })
+    }).populate({ path: "fromUserId", select: "firstName lastName gender age about skills photoURL" })
 
     if (!connectionRequests) {
       throw new Error("no requests found")
     }
+   
 
     res.json({ message: "request fetch is successful", data: connectionRequests })
 
@@ -54,7 +55,7 @@ userRouter.get('/user/connections', userAuth, async (req, res) => {
 
 userRouter.get("/user/feed", userAuth, async (req, res) => {
   try {
-    const loggedUserId = new mongoose.Types.ObjectId(req.user._id)
+    const loggedUserId = req.user._id
 
     const page = req.query.page || 1;
     let limit = req.query.limit || 10;
@@ -68,7 +69,7 @@ userRouter.get("/user/feed", userAuth, async (req, res) => {
         { fromUserId: loggedUserId, },
         { toUserId: loggedUserId }
       ]
-    }).select("fromUserId toUserid")
+    }).select("fromUserId toUserId")
 
     const hideUsersFromFeed = new Set();
 
