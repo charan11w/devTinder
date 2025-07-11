@@ -59,7 +59,6 @@ requestRouter.post("/request/review/:status/:requestId", userAuth,async (req, re
   try {
 
     const {user}=req
-    console.log(user)
     if (!allowedStatus.includes(status)) {
       throw new Error("Invalid request  status")
     }

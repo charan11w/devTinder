@@ -8,7 +8,7 @@ const connectDb = require('./config/database')
 
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://dev-t-inder-ui.vercel.app/",
   credentials:true
 }))
 app.use(express.json())
