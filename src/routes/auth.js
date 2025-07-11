@@ -21,7 +21,10 @@ authRouter.post('/signup', async (req, res) => {
 
      const token = await savedUser.getJWT();
       //attaching jwt token to cookies and sending it back with response
-      res.cookie('token', token)
+      res.cookie('token', token,{
+         secure: true, // ❗️Important: required for HTTPS on Vercel + Render
+  sameSite: "None", // ❗️Important: for cross-origin cookies
+      })
 
     res.status(201).json({
       message: 'User Created Successfully',
@@ -46,7 +49,10 @@ authRouter.post('/login', async (req, res) => {
       //creating jwt token
       const token = await user.getJWT();
       //attaching jwt token to cookies and sending it back with response
-      res.cookie('token', token)
+      res.cookie('token', token,{
+         secure: true, // ❗️Important: required for HTTPS on Vercel + Render
+  sameSite: "None", // ❗️Important: for cross-origin cookies
+      })
       res.json({ message: "login successfull!!",data:user});
     } else {
       throw new Error('Invalid Credentials')
