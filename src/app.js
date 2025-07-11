@@ -25,12 +25,12 @@ app.use('/',authRouter,profileRouter,requestRouter,userRouter)
 
 
 
-
+const PORT=process.env.PORT || 7777
 
 connectDb()
   .then(() => {
     console.log("connection to db is successful")
-    app.listen(7777, () => {
+    app.listen(PORT, () => {
       console.log('server is listening on the port 7777...')
     })
   })
